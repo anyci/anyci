@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -eo pipefail
+readonly ANYCI_ROOT="${ANYCI_ROOT:-$( cd "$(dirname "$0")/.." ; pwd -P)}"
+readonly __entry=$(basename "$0")
+log(){ echo -e "$__entry: $*" >&2; }
+die(){ log "[ERR] $*"; exit 1; }
+
+log "foo"
