@@ -24,3 +24,12 @@ lib/lookup(){
   done
   return 1
 }
+
+lib/set/search_paths(){
+  __SEARCH_PATHS=()
+  for p in $(lib/read/paths "$1"); do
+    __SEARCH_PATHS+=("$p")
+  done
+  [ -n "$ANYCI_FAMILY" ] && __SEARCH_PATHS+=("$ANYCI_ROOT/family/$ANYCI_FAMILY")
+  __SEARCH_PATHS+=("$ANYCI_ROOT/group/$ANYCI_GROUP")
+}
