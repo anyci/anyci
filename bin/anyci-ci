@@ -1,8 +1,28 @@
 #!/usr/bin/env bash
 set -eo pipefail
-readonly ANYCI_ROOT="${ANYCI_ROOT:-$( cd "$(dirname "$0")/.." ; pwd -P)}"
+readonly ANYCI_ROOT="$( cd "$(dirname "$0")/.." ; pwd -P)"
 readonly __entry=$(basename "$0")
 log(){ echo -e "$__entry: $*" >&2; }
 die(){ log "[ERR] $*"; exit 1; }
+. "$ANYCI_ROOT/lib/shell-helpers.sh"
 
+ANYCI_FAMILY="${ANYCI_FAMILY:-}"
+ANYCI_GROUP="${ANYCI_GROUP:-default}"
+ANYCI_PROJECT_PATHS="${ANYCI_PROJECT_PATHS:-ci:pipeline}"
+
+[ -n "$PROJECT_ROOT" ] || die "PROJECT_ROOT cannot be empty"
+lib/require/dir "$PROJECT_ROOT" "$ANYCI_ROOT/family/$ANYCI_FAMILY" "$ANYCI_ROOT/group/$ANYCI_GROUP"
+
+#
+# prepare search paths. priority: project paths > family paths > group paths
+#
+__search_paths=()
+for p in $(lib/read/paths "$ANYCI_PROJECT_PATHS"); do
+  __search_paths+=("$p")
+done
+[ -n "$ANYCI_FAMILY" ] && __search_paths+=("$ANYCI_ROOT/family/$ANYCI_FAMILY")
+__search_paths+=("$ANYCI_ROOT/group/$ANYCI_GROUP")
+
+cd "$PROJECT_ROOT"
+log "search paths:" "${__search_paths[@]}"
 log "foo"
