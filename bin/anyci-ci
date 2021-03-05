@@ -4,6 +4,7 @@ readonly ANYCI_ROOT="$( cd "$(dirname "$0")/.." ; pwd -P)"
 readonly __entry=$(basename "$0")
 log(){ echo -e "$__entry: $*" >&2; }
 die(){ log "[ERR] $*"; exit 1; }
+# shellcheck source=./lib/shell-helpers.sh
 . "$ANYCI_ROOT/lib/shell-helpers.sh"
 
 ANYCI_FAMILY="${ANYCI_FAMILY:-}"
@@ -16,13 +17,12 @@ lib/require/dir "$PROJECT_ROOT" "$ANYCI_ROOT/family/$ANYCI_FAMILY" "$ANYCI_ROOT/
 #
 # prepare search paths. priority: project paths > family paths > group paths
 #
-__search_paths=()
+__SEARCH_PATHS=()
 for p in $(lib/read/paths "$ANYCI_PROJECT_PATHS"); do
-  __search_paths+=("$p")
+  __SEARCH_PATHS+=("$p")
 done
-[ -n "$ANYCI_FAMILY" ] && __search_paths+=("$ANYCI_ROOT/family/$ANYCI_FAMILY")
-__search_paths+=("$ANYCI_ROOT/group/$ANYCI_GROUP")
+[ -n "$ANYCI_FAMILY" ] && __SEARCH_PATHS+=("$ANYCI_ROOT/family/$ANYCI_FAMILY")
+__SEARCH_PATHS+=("$ANYCI_ROOT/group/$ANYCI_GROUP")
 
-cd "$PROJECT_ROOT"
-log "search paths:" "${__search_paths[@]}"
+step_file=$(lib/lookup "foo" "step") || log "failed to find step"
 log "foo"
