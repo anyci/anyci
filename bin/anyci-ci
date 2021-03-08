@@ -2,7 +2,7 @@
 set -eo pipefail
 readonly ANYCI_ROOT="$( cd "$(dirname "$0")/.." ; pwd -P)"
 readonly __entry=$(basename "$0")
-log(){ echo -e "$__entry: $*" >&2; }
+log(){ printf "%-19s [${LOG_LEVEL:-INFO}] $*\n" "# ($__entry)" >&2; }
 die(){ log "[ERR] $*"; exit 1; }
 [ -n "$PROJECT_ROOT" ] || die "PROJECT_ROOT cannot be empty"
 
