@@ -14,13 +14,14 @@ lib/require/dir(){
 }
 
 lib/lookup(){
-  log "looking for '$1' $2"
+  dlog "looking for '$1'"
   for p in "${__SEARCH_PATHS[@]}"; do
     [ -e "$p/$1" ] && {
+      dlog "    found ${p/$ANYCI_ROOT/<anyci workspace>}/$1"
       echo "$p/$1"
       return 0
     }
-    log "    tried ${p/$ANYCI_ROOT/<anyci workspace>}/$1"
+    dlog "    tried ${p/$ANYCI_ROOT/<anyci workspace>}/$1"
   done
   return 1
 }
