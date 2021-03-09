@@ -22,10 +22,12 @@ AnyCI enables portable pipelines. Its patterns allow you to _reliably_ run pipel
 Once in AnyCI you can try different CIs with very little effort. And your developers will love you. And so will your opsy teams for taking care of dependencies.
 
 ### Tenets
+
 * *accessible*: let developers run _exactly_ what the CI platform runs without having to check-in code. aka avoiding "commit hell".
-* *portable*: execute CI steps reliably inside containers. aka getting out of the dependency managment business and freeing yourself to try different CI platforms with _zero code changes_.
-* *maintainable*: keep things [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) in your centralized `anyci` repository. aka encouraging inheritance and reuse.
+* *portable*: execute CI steps reliably inside containers. aka getting out of the dependency managment business.
+* *maintainable*: keep things [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) in your centralized `anyci` repository. aka less reviews, more inheritance and and reuse.
 * *flexible*: allow customizations per codebase repository through simple overrides. aka getting out of the way.
+
 > :thought_balloon: these tenets seems a universal tooling standard. lets call it **PFAM**
 
 ## environment variables
@@ -43,9 +45,7 @@ PROJECT_ROOT | ~auto | Path of project calling `bin/ci`. AKA The codebase CI is 
 
 ## the docker bits
 
-:construction:
-
-AnyCI executes CI steps inside a container that provides dependencies necessary to do the work.
+AnyCI executes CI steps inside a container providing dependencies necessary to do the work.
 
 For instance the container can provide [shellcheck](https://github.com/koalaman/shellcheck) and [hadolint](https://github.com/hadolint/hadolint) to the linting stage of the `check` step -- and these tools don't need to be available on the system running CI.
 
@@ -79,8 +79,6 @@ bin/ci debug
 # (debug)    [INFO] debug step called. dumping the environment!
 ...
 ```
-
-
 
 ## the diagram
 

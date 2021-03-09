@@ -38,7 +38,7 @@ main(){
   EXEC_DOCKERFILE="${EXEC_DOCKERFILE:-$PROJECT_ROOT/pipeline/docker/Dockerfile}"
   EXEC_IMAGE="${EXEC_IMAGE:-$(docker:get_image_build)}"
 
-  LOG_LEVEL=debug log "executing inside $EXEC_IMAGE ..."
+  dlog "executing inside $EXEC_IMAGE ..."
   docker:set_flags
   docker run --rm --log-driver=none --interactive=true "${docker_flags[@]}" \
     --env-file=<( env "${var_blacklist[@]}" | cut -f1 -d= ) \
@@ -124,6 +124,7 @@ docker:set_flags(){
 
 [[ "$OSTYPE" =~ darwin|macos* ]] && md5sum='md5 -r' || md5sum="md5sum"
 readonly __entry=$(basename "$0")
-log(){ printf "%-19s [${LOG_LEVEL:-INFO}] $*\n" "# ($__entry)" >&2; }
-die(){ LOG_LEVEL=ERR log "$*"; exit 1; }
+log(){ printf "# %-${__lpad:-17}s [${__ll:-INFO}] $*\n" "($__entry)" >&2; }
+dlog(){ __ll=debug log "$*"; }
+die(){ __ll=ERR log "$*"; exit 1; }
 main "$@"

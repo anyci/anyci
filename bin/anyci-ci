@@ -2,8 +2,9 @@
 set -eo pipefail
 readonly ANYCI_ROOT="$( cd "$(dirname "$0")/.." ; pwd -P)"
 readonly __entry=$(basename "$0")
-log(){ printf "%-19s [${LOG_LEVEL:-INFO}] $*\n" "# ($__entry)" >&2; }
-die(){ log "[ERR] $*"; exit 1; }
+log(){ printf "# %-${__lpad:-17}s [${__ll:-INFO}] $*\n" "($__entry)" >&2; }
+dlog(){ __ll=debug log "$*"; }
+die(){ __ll=ERR log "$*"; exit 1; }
 [ -n "$PROJECT_ROOT" ] || die "PROJECT_ROOT cannot be empty"
 
 # shellcheck source=../lib/shell-helpers.sh
