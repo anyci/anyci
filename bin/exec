@@ -16,7 +16,8 @@
 #
 #  Environment Variables:
 #  EXEC_BUILD_FLAGS: additional `docker build` flags. optional.
-#  EXEC_DOCKERFILE: The Dockerfile of the <cmd> image to build. Used if EXEC_IMAGE is empty.
+#  EXEC_DOCKERFILE: The Dockerfile of the <cmd> image to build. Used if EXEC_IMAGE is empty.\
+#  EXEC_DOCKER_FLAGS: Arbitrary flags to pass to docker run. Comma separated. E.g. "-v, '/host path:/container path:ro'"
 #  EXEC_ENABLE_CACHE: false to disable build cache, e.g. `EXEC_ENABLE_CACHE=false bin/exec ...`
 #  EXEC_IMAGE: The <cmd> image (e.g. 'gradle:6'). If empty, use EXEC_DOCKERFILE.
 #
@@ -40,6 +41,11 @@ main(){
 
   dlog "executing inside $EXEC_IMAGE ..."
   docker:set_flags
+
+  for x in "${docker_flags[@]}"; do
+    echo "$x"
+  done
+
   docker run --rm --log-driver=none --interactive=true "${docker_flags[@]}" \
     --env-file=<( env "${var_blacklist[@]}" | cut -f1 -d= ) \
     -e "__EXEC_IMAGE=$EXEC_IMAGE" \
@@ -69,7 +75,7 @@ docker:get_image_build(){
 }
 
 docker:set_flags(){
-  docker_flags=("${DOCKER_FLAGS[@]}")
+  IFS="," read -r -a docker_flags <<< "$EXEC_DOCKER_FLAGS"
   var_blacklist=(
     -u HOME
     -u HOSTNAME
