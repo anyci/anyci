@@ -7,8 +7,8 @@ dlog(){ __ll=debug log "$*"; }
 die(){ __ll=ERR log "$*"; exit 1; }
 [ -n "$PROJECT_ROOT" ] || die "PROJECT_ROOT cannot be empty"
 
-# shellcheck source=../lib/shell-helpers.sh
-. "$ANYCI_ROOT/lib/shell-helpers.sh"
+# shellcheck source=../lib/anyci-helpers.sh
+. "$ANYCI_ROOT/lib/anyci-helpers.sh"
 
 ANYCI_FAMILY="${ANYCI_FAMILY:-}"
 ANYCI_GROUP="${ANYCI_GROUP:-default}"

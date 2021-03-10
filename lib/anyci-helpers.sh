@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-# shellcheck ignore-variable-pattern=__
 lib/read/paths()(
   IFS=:; set -o noglob
   for p in $1; do
@@ -14,7 +13,7 @@ lib/require/dir(){
 }
 
 lib/lookup(){
-  dlog "looking for '$1'"
+  dlog "lookup: $1"
   for p in "${__SEARCH_PATHS[@]}"; do
     [ -e "$p/$1" ] && {
       dlog "    found ${p/$ANYCI_ROOT/<anyci workspace>}/$1"
@@ -23,6 +22,7 @@ lib/lookup(){
     }
     dlog "    tried ${p/$ANYCI_ROOT/<anyci workspace>}/$1"
   done
+  dlog "    lookup failed"
   return 1
 }
 
