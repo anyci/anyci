@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 readonly __entry=$(basename "$0")
-log(){ printf "%-19s [${LOG_LEVEL:-INFO}] $*\n" "# ($__entry)" >&2; }
-die(){ LOG_LEVEL=ERR log "$*"; exit 1; }
+log(){ printf "# %-${__lpad:-17}s [${__ll:-INFO}] $*\n" "($__entry)" >&2; }
+die(){ __ll=ERR log "$*"; exit 1; }
 
 log "debug step called. dumping the environment!"
 env | sort | sed 's/^/    /g'

@@ -15,7 +15,7 @@ ANYCI_GROUP="${ANYCI_GROUP:-default}"
 lib/require/dir "$PROJECT_ROOT" "$ANYCI_ROOT/family/$ANYCI_FAMILY" "$ANYCI_ROOT/group/$ANYCI_GROUP"
 lib/set/search_paths "${ANYCI_PROJECT_PATHS:-ci:pipeline}"
 
-# if steps are provided, e.g. 'bin/ci' versus 'bin/ci foo', these will execute
+# if no steps are provided, e.g. 'bin/ci' versus 'bin/ci foo', these will execute
 ANYCI_DEFAULT_STEPS=(
   check
   build
@@ -28,19 +28,13 @@ case "$1" in
   -v|--version|version)
     lib/version ;;
   exec)
-    exec "$ANYCI_ROOT/bin/exec" "$@"
+    shift && lib/exec "$@"
+    exit $?
     ;;
   *)
     [ $# -eq 0 ] && set -- "${ANYCI_DEFAULT_STEPS[@]}"
     ;;
 esac
-
-export EXEC_IMAGE="${EXEC_IMAGE:-$ANYCI_IMAGE}"
-[ -n "$EXEC_IMAGE" ] || {
-  dlog "ANYCI_IMAGE not provided. Will build from Dockerfile..."
-  EXEC_DOCKERFILE="$(lib/lookup docker/Dockerfile)"
-  export EXEC_DOCKERFILE
-}
 
 # step execution
 log "step(s) to execute:" "$@"
@@ -49,8 +43,6 @@ for step in "$@"; do
   [ -x "$step_file" ] || die "$step_file must be executable!"
 
   log "executing step: $step"
-  cd "$PROJECT_ROOT"
-  ANYCI_STEP_NAME="$step" \
-  EXEC_DOCKER_FLAGS="-v,$ANYCI_ROOT:$ANYCI_ROOT:ro" \
-    "$ANYCI_ROOT/bin/exec" "\"$step_file\""
+  export ANYCI_STEP_NAME="$step"
+  lib/exec "$step_file"
 done
