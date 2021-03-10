@@ -35,6 +35,13 @@ case "$1" in
     ;;
 esac
 
+export EXEC_IMAGE="${EXEC_IMAGE:-$ANYCI_IMAGE}"
+[ -n "$EXEC_IMAGE" ] || {
+  dlog "ANYCI_IMAGE not provided. Will build from Dockerfile..."
+  EXEC_DOCKERFILE="$(lib/lookup docker/Dockerfile)"
+  export EXEC_DOCKERFILE
+}
+
 # step execution
 log "step(s) to execute:" "$@"
 for step in "$@"; do

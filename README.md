@@ -41,6 +41,7 @@ name | default | description
 ANYCI_ROOT | ~auto | Path of the anyci workspace. Created by [anyci-bootstrap](https://github.com/briceburg/anyci-bootstrap). This is an "always-updated" checkout of your anyci repo.
 ANYCI_FAMILY | ~empty | Optional. If set, anyci will attempt to use resources such as Dockerfiles and Step Scripts from the family directory. Lookups take priorty over `ANYCI_GROUP`.
 ANYCI_GROUP | default | The anyci group. Useful for providing conventions and defaults. Acts as a fallback to lookups.
+ANYCI_IMAGE | ~empty | Optional. If set, the docker image to use. Equivalent of setting `EXEC_IMAGE`. See [the docker bits](#the-docker-bits).
 PROJECT_ROOT | ~auto | Path of project calling `bin/ci`. AKA The codebase CI is running against. Lookups take priority over `ANYCI_FAMILY`.
 
 ## the docker bits
