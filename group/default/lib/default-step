@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
-readonly __entry=$(basename "$0")
-log(){ printf "# %-${__lpad:-17}s [${__ll:-INFO}] $*\n" "($__entry)" >&2; }
-die(){ __ll=ERR log "$*"; exit 1; }
+readonly __ENTRY=$(basename "$0")
+# shellcheck source=../../../lib/log-helpers.sh
+. "$ANYCI_ROOT/lib/log-helpers.sh"
 
 __ll=WARN log "default $ANYCI_STEP_NAME step called, although has not yet been implemented..." \
   "please implement!"

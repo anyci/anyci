@@ -124,8 +124,8 @@ docker:set_flags(){
 }
 
 [[ "$OSTYPE" =~ darwin|macos* ]] && md5sum='md5 -r' || md5sum="md5sum"
-readonly __entry=$(basename "$0")
-log(){ printf "# %-${__lpad:-17}s [${__ll:-INFO}] $*\n" "($__entry)" >&2; }
+readonly __ENTRY=$(basename "$0")
+log(){ printf "# %-${__lpad:-17}s [${__ll:-INFO}] $*\n" "($__ENTRY)" >&2; }
 dlog(){ __ll=debug log "$*"; }
 die(){ __ll=ERR log "$*"; exit 1; }
 main "$@"

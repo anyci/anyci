@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
 set -eo pipefail
 readonly ANYCI_ROOT="$( cd "$(dirname "$0")/.." ; pwd -P)"
-readonly __entry=$(basename "$0")
-log(){ printf "# %-${__lpad:-17}s [${__ll:-INFO}] $*\n" "($__entry)" >&2; }
-dlog(){ __ll=debug log "$*"; }
-die(){ __ll=ERR log "$*"; exit 1; }
-[ -n "$PROJECT_ROOT" ] || die "PROJECT_ROOT cannot be empty"
+readonly __ENTRY=$(basename "$0")
+
+# shellcheck source=../lib/log-helpers.sh
+. "$ANYCI_ROOT/lib/log-helpers.sh"
 
 # shellcheck source=../lib/anyci-helpers.sh
 . "$ANYCI_ROOT/lib/anyci-helpers.sh"
 
 ANYCI_FAMILY="${ANYCI_FAMILY:-}"
 ANYCI_GROUP="${ANYCI_GROUP:-default}"
+
+[ -n "$PROJECT_ROOT" ] || die "PROJECT_ROOT cannot be empty"
 lib/require/dir "$PROJECT_ROOT" "$ANYCI_ROOT/family/$ANYCI_FAMILY" "$ANYCI_ROOT/group/$ANYCI_GROUP"
 lib/set/search_paths "${ANYCI_PROJECT_PATHS:-ci:pipeline}"
 
