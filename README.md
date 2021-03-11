@@ -2,16 +2,18 @@
 
 AnyCI enables portable pipelines. Its patterns allow you to _reliably_ run pipelines _anywhere_; e.g. from Jenkins, GitLab CI, Travis, or from codebase checkouts in **local development environments**.
 
+Q: What is not fun?
+
+A: Reverse engineering foreign DSLs to try to reproduce what is happening in CI.
+
 Once in AnyCI you can try different CIs with very little effort. And your developers will love you. And so will your opsy teams for taking care of dependencies.
 
-### Tenets
+## Tenets
 
 * *accessible*: let developers run _exactly_ what the CI platform runs without having to check-in code. aka avoiding "commit hell".
 * *portable*: execute CI steps reliably inside containers. aka getting out of the dependency managment business.
 * *maintainable*: keep things [DRY](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) in your centralized `anyci` repository. aka less reviews, more inheritance and and reuse.
 * *flexible*: allow customizations per codebase repository through simple overrides. aka getting out of the way.
-
-> :thought_balloon: these tenets seem a universal tooling calling. lets call it **PFAM**
 
 ## Overview
 
@@ -31,17 +33,31 @@ bin/ci larry curly moe
 
 `bin/ci` also supports -h|--help|help, -v|--version|version, and the `exec` command for running arbitrary commands in the step container (see [debugging](#debugging)).
 
-### default steps
+#### default steps
 
-If no step is provided, the default steps of `check`, `build`, and `test` will be run in that order. This is the equivalent of;
+If no step is provided, the default steps of `check`, `build`, and `test` will be run in that order.
 
 ```
+bin/ci
+# ^^^ is the equivalent of ->
 bin/ci check build test
 ```
 
-... and is **very useful to developers**. Simply run `bin/ci` from your anyci enabled project and it will run the same things the CI system does without having to check in any code.
+... and is **very useful to developers**. Simply run `bin/ci` from your AnyCI enabled project and it will run the same things the CI system does without having to check in any code.
+
+#### requirements
+
+To run `bin/ci` the host or "agent" environment must have;
+* the [docker](https://www.docker.com/) cli command
+* [git](https://github.com/git/git) - the stupid content tracker
+* the ability to clone [anyci-bootstrap](https://github.com/briceburg/anyci-bootstrap) (ANYCI_BOOTSTRAP_URL)
 
 ### CI Examples
+
+Below some examples of AnyCI enabled projects under different CI platforms.
+
+> :thought_balloon: Avoid using foreign DSLs and docker-like plugins in your CI definitions and let AnyCI steps keep things portable. Reserve things like report gathering, slack notifications, and environment preparation (e.g. secrets expected by steps) to the pipeline DSL.
+
 :construction:
 * GitLab
 * Travis
