@@ -16,7 +16,7 @@ AnyCI is about executing CI steps inside a [step container](#the-docker-bits). S
 
 > :thought_balloon: Use AnyCI steps for _core_ pipeline behavior -- such as testing and building artifacts. This ensures the functionality is accessible and able to run locally (even if CI is down!). Leave the _glue_ to the pipeline DSL -- such as sending slack notifications, triggering downstream pipelines, and seeding the environment with secrets. See [TBD CI platform examples](#ci-examples) for inspiration.
 
-Steps are executed via `bin/ci`. Add `bin/ci` to your projects via the [anyci-bootstrap](https://github.com/briceburg/anyci-bootstrap).
+Steps are executed via `bin/ci`. Add `bin/ci` to your projects via the [anyci-bootstrap](https://github.com/anyci/anyci-bootstrap).
 
 ```
 # execute the 'foo' step
@@ -45,7 +45,7 @@ bin/ci check build test
 To run `bin/ci` the host or "agent" environment must have;
 * the [docker](https://www.docker.com/) cli command
 * [git](https://github.com/git/git) - the stupid content tracker
-* the ability to clone [anyci-bootstrap](https://github.com/briceburg/anyci-bootstrap) (ANYCI_BOOTSTRAP_URL)
+* the ability to clone [anyci-bootstrap](https://github.com/anyci/anyci-bootstrap) (ANYCI_BOOTSTRAP_URL)
 
 ### CI Examples
 
@@ -63,7 +63,7 @@ AnyCI is driven entirely by environment variables. In theory, assuming your CI p
 
 name | default | description
 --- | --- | ---
-ANYCI_ROOT | ~auto | Path of the AnyCI workspace. Created by [anyci-bootstrap](https://github.com/briceburg/anyci-bootstrap). This is an "always-updated" checkout of your shared anyci repo.
+ANYCI_ROOT | ~auto | Path of the AnyCI workspace. Created by [anyci-bootstrap](https://github.com/anyci/anyci-bootstrap). This is an "always-updated" checkout of your shared anyci repo.
 ANYCI_IMAGE | ~empty | Optional. If set, the docker image to use. Equivalent of setting `EXEC_IMAGE`. See [the docker bits](#the-docker-bits).
 ANYCI_PATHS | ci:^default | Colon seperated list of [lookup](#lookups) paths in order of priority. Relative paths are relative to PROJECT_ROOT. `^` is replaced with $ANYCI_ROOT/. Customize this to suit your inheritance model, e.g. `ci:^acme-gradle:^default`
 PROJECT_ROOT | ~auto | Path of project calling `bin/ci`. AKA The codebase CI is running against.
