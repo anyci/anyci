@@ -93,7 +93,7 @@ For example, the `docker/Dockerfile` lookup is used to find the step container s
 CI steps are provided in the same way. For instance, `bin/ci foo` will execute the first 'foo' step found in this order;
 
 * `$PROJECT_ROOT/ci/steps/foo`†
-* `$ANYCI_ROOT/default/steps/afoo`†
+* `$ANYCI_ROOT/default/steps/foo`†
 
 † as configured by the `ANYCI_PATHS` [environmet variable](#environment-variables).
 

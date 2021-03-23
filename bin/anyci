@@ -36,7 +36,7 @@ esac
 # step execution
 log "step(s) to execute:" "$@"
 for step in "$@"; do
-  step_file=$(lib/lookup "$step") || die "failed to find '$step' step"
+  step_file=$(lib/lookup "steps/$step") || die "failed to find '$step' step"
   [ -x "$step_file" ] || die "$step_file must be executable!"
 
   log "executing step: $step"

@@ -21,11 +21,11 @@ lib/lookup(){
   dlog "lookup: $1"
   for p in "${__SEARCH_PATHS[@]}"; do
     [ -e "$p/$1" ] && {
-      dlog "    \033[1mfound ${p//$ANYCI_ROOT/<anyci workspace>}/$1\033[0m"
+      dlog "    \033[1mfound ${p//$ANYCI_ROOT/<anyci>}/$1\033[0m"
       echo "$p/$1"
       return 0
     }
-    dlog "    tried ${p//$ANYCI_ROOT/<anyci workspace>}/$1"
+    dlog "    tried ${p//$ANYCI_ROOT/<anyci>}/$1"
   done
   dlog "    lookup failed"
   return 1
