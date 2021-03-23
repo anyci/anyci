@@ -21,11 +21,11 @@ lib/lookup(){
   dlog "lookup: $1"
   for p in "${__SEARCH_PATHS[@]}"; do
     [ -e "$p/$1" ] && {
-      dlog "    found ${p/$ANYCI_ROOT/<anyci workspace>}/$1"
+      dlog "    found ${p//$ANYCI_ROOT/<anyci workspace>}/$1"
       echo "$p/$1"
       return 0
     }
-    dlog "    tried ${p/$ANYCI_ROOT/<anyci workspace>}/$1"
+    dlog "    tried ${p//$ANYCI_ROOT/<anyci workspace>}/$1"
   done
   dlog "    lookup failed"
   return 1
@@ -47,10 +47,8 @@ lib/require/dir(){
 lib/set/search_paths(){
   __SEARCH_PATHS=()
   for p in $(lib/read/paths "$1"); do
-    __SEARCH_PATHS+=("$p")
+    __SEARCH_PATHS+=("${p//^/$ANYCI_ROOT/}")
   done
-  [ -n "$ANYCI_FAMILY" ] && __SEARCH_PATHS+=("$ANYCI_ROOT/family/$ANYCI_FAMILY")
-  __SEARCH_PATHS+=("$ANYCI_ROOT/group/$ANYCI_GROUP")
 }
 
 export ANYCI_ROOT
