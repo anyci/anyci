@@ -21,9 +21,13 @@ ANYCI_DEFAULT_STEPS=(
 
 case "$1" in
   -h|--help|help)
-    lib/help ;;
+    lib/help
+    exit
+    ;;
   -v|--version|version)
-    lib/version ;;
+    lib/version
+    exit
+    ;;
   exec)
     shift && lib/exec "$@"
     exit $?

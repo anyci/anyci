@@ -17,6 +17,16 @@ lib/exec(){
   "$ANYCI_ROOT/bin/exec" "$@"
 }
 
+lib/help(){
+  lib/version
+  log "AnyCI Step Usage: anyci [step...]"
+  log "              ex: bin/ci larry curly moe"
+  log "AnyCI Exec Usage: anyci exec <cmd...>"
+  log "              ex: bin/ci exec gradle --version"
+  log "              ex: bin/ci exec sh"
+  log "See https://github.com/anyci/anyci for more"
+}
+
 lib/lookup(){
   dlog "lookup: $1"
   for p in "${__SEARCH_PATHS[@]}"; do
@@ -49,6 +59,10 @@ lib/set/search_paths(){
   for p in $(lib/read/paths "$1"); do
     __SEARCH_PATHS+=("${p//^/$ANYCI_ROOT/}")
   done
+}
+
+lib/version(){
+  log "AnyCI version: $(git -C "$ANYCI_ROOT" rev-parse --short HEAD) ($(git -C "$ANYCI_ROOT" rev-parse --abbrev-ref HEAD))"
 }
 
 export ANYCI_ROOT
