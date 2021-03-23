@@ -21,7 +21,7 @@ lib/lookup(){
   dlog "lookup: $1"
   for p in "${__SEARCH_PATHS[@]}"; do
     [ -e "$p/$1" ] && {
-      dlog "    found ${p//$ANYCI_ROOT/<anyci workspace>}/$1"
+      dlog "    \033[1mfound ${p//$ANYCI_ROOT/<anyci workspace>}/$1\033[0m"
       echo "$p/$1"
       return 0
     }
