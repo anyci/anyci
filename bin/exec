@@ -31,7 +31,7 @@
 # @source-path bin/exec
 # @source-url https://raw.githubusercontent.com/briceburg/tools/main/bin/exec
 # @revision git-ref HEAD
-# @version 0.2.3
+# @version 0.2.4
 
 main(){
   set -eo pipefail
@@ -42,7 +42,7 @@ main(){
   dlog "executing inside $EXEC_IMAGE ..."
   docker:set_flags
   docker run --rm --log-driver=none --interactive=true "${docker_flags[@]}" \
-    --env-file=<( env "${var_blacklist[@]}" | cut -f1 -d= ) \
+    --env-file=<( env "${var_blacklist[@]}" | cut -f1 -d= | sed '/.*[[:space:]]/d' ) \
     -e "__EXEC_IMAGE=$EXEC_IMAGE" \
     -e HOME="$HOME" \
     --network=host \
@@ -124,8 +124,8 @@ docker:set_flags(){
 }
 
 [[ "$OSTYPE" =~ darwin|macos* ]] && md5sum='md5 -r' || md5sum="md5sum"
-readonly __ENTRY=$(basename "$0")
-log(){ printf "# %-${__lpad:-17}s [${__ll:-INFO}] $*\n" "($__ENTRY)" >&2; }
+readonly __entry=$(basename "$0")
+log(){ printf "# %-${__lpad:-17}s [${__ll:-INFO}] $*\n" "($__entry)" >&2; }
 dlog(){ __ll=debug log "$*"; }
 die(){ __ll=ERR log "$*"; exit 1; }
 main "$@"
