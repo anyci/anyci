@@ -13,7 +13,7 @@ readonly __ENTRY=$(basename "$0")
 lib/set/search_paths "${ANYCI_PATHS:-ci:^default}"
 
 # if no steps are provided, e.g. 'bin/ci' versus 'bin/ci foo', these will execute
-ANYCI_DEFAULT_STEPS=(
+export ANYCI_DEFAULT_STEPS=(
   check
   build
   test
@@ -48,5 +48,6 @@ for step in "$@"; do
 
   log "executing step: $step"
   export ANYCI_STEP_NAME="$step"
+  export ANYCI_STEP_FILE="$step_file"
   lib/exec "$step_file"
 done
