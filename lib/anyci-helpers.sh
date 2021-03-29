@@ -13,7 +13,6 @@ lib/exec(){
     __lib_exec_initialized=true
   }
 
-  cd "$PROJECT_ROOT" || die "failed to enter PROJECT_ROOT"
   "$ANYCI_ROOT/bin/exec" "$@"
 }
 

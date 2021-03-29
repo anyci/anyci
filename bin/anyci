@@ -19,6 +19,9 @@ ANYCI_DEFAULT_STEPS=(
   test
 )
 
+# run relative to PROJECT_ROOT
+cd "$PROJECT_ROOT" || die "failed to enter PROJECT_ROOT"
+
 case "$1" in
   -h|--help|help)
     lib/help
