@@ -1,5 +1,4 @@
 #!/usr/bin/env sh
-readonly __ENTRY=$(basename "$0")
 # shellcheck source=../../lib/log-helpers.sh
 . "$ANYCI_ROOT/lib/log-helpers.sh"
 
