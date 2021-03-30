@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+#
+# usage: gitenv [repository path]
+#
+#  gitenv will source environment files based on regex matching of a project's
+#    git remote ("origin" by default) -- allowing for centralized configuration.
+#
+#  Environment Variables:
+#    GITENV_CONFIG: gitenv configuration file. "gitenv.yml" by default.
+#    GITENV_ROOT: relative configuration and environment file paths are relative to GITENV_ROOT. "~/.gitenv" by default.
+#    PROJECT_REMOTE: name of git remote. "origin" by default.
+#    PROJECT_ROOT: path to project. current directy by default.
+#
+# Copyright (C) 2021 Brice Burgess
+# This program is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+# You should have received a copy of the GNU Lesser General Public License along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# @license LGPLv3
+# @source git@github.com:briceburg/gitenv.git
+# @revision git-ref HEAD
+# @version 0.0.0
+
+main(){
+  set -eo pipefail
+
+  PROJECT_REMOTE="${PROJECT_REMOTE:-origin}"
+  PROJECT_ROOT="${PROJECT_ROOT:-$PWD}"
+  GITENV_CONFIG="${GITENV_CONFIG:-gitenv.yml}"
+  GITENV_ROOT="${GITENV_ROOT:-$HOME/.gitenv}"
+
+  cd "$GITENV_ROOT" 2>/dev/null || __ll=WARN log "failed to enter GITENV_ROOT"
+  [ -e "$GITENV_CONFIG" ] || die "missing GITENV_CONFIG: $GITENV_CONFIG"
+
+  PROJECT_URL="$(git -C "$PROJECT_ROOT" remote get-url "$PROJECT_REMOTE")" || \
+    die "failed to determine '$PROJECT_REMOTE' url of project: $PROJECT_ROOT"
+
+  # extract host, path, and name from PROJECT_URL (ignore proto/auths/port)
+  without_proto="${PROJECT_URL#*:\/\/}"
+  without_auth="${without_proto##*@}"
+  [[ $without_auth =~ ^([^:\/]+)(:[[:digit:]]+\/|:|\/)?(.*) ]]
+  PROJECT_HOST="${BASH_REMATCH[1]}"
+  PROJECT_PATH="${BASH_REMATCH[3]}"
+  PROJECT_NAME="$(basename $PROJECT_PATH .git)"
+
+  dlog "PROJECT_URL: $PROJECT_URL"
+  dlog "PROJECT_HOST: $PROJECT_HOST"
+  dlog "PROJECT_PATH: $PROJECT_PATH"
+  dlog "PROJECT_NAME: $PROJECT_NAME"
+
+  log "parsing for matches..."
+  log "coming to a theatre near you."
+}
+
+readonly __ENTRY=$(basename "$0")
+log(){ printf "# %-${__lpad:-17}s [${__ll:-INFO}] $*\n" "($__ENTRY)" >&2; }
+dlog(){ __ll=debug log "$*"; }
+die(){ __ll=ERR log "$*"; exit 1; }
+main "$@"
