@@ -3,7 +3,7 @@
 lib/exec(){
   $__lib_exec_initialized || {
     export EXEC_IMAGE="${EXEC_IMAGE:-$ANYCI_IMAGE}"
-    export EXEC_DOCKER_FLAGS="-v,$ANYCI_ROOT:$ANYCI_ROOT:ro"
+    export EXEC_DOCKER_FLAGS="-v,$ANYCI_ROOT:$ANYCI_ROOT"
 
     # source gitenv provided environment
     . <("$ANYCI_ROOT/bin/gitenv")
