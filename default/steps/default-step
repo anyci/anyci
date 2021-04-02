@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
 # shellcheck source=../../lib/log-helpers.sh
 . "$ANYCI_ROOT/lib/log-helpers.sh"
+# shellcheck source=../../lib/step-helpers.sh
+. "$ANYCI_ROOT/lib/step-helpers.sh"
 
 __ll=WARN log "default $ANYCI_STEP_NAME step called, although has not yet been implemented..." \
   "please implement!"

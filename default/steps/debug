@@ -1,6 +1,8 @@
 #!/usr/bin/env sh
 # shellcheck source=../../lib/log-helpers.sh
 . "$ANYCI_ROOT/lib/log-helpers.sh"
+# shellcheck source=../../lib/step-helpers.sh
+. "$ANYCI_ROOT/lib/step-helpers.sh"
 
 log "debug step called. dumping the environment!"
 env | sort | sed 's/^/    /g'
