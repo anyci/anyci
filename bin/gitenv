@@ -36,6 +36,7 @@ main(){
     die "failed to determine '$PROJECT_REMOTE' url of project: $PROJECT_ROOT"
 
   # extract host, path, and name from PROJECT_URL (ignore proto/auths/port)
+  dlog "PROJECT_URL: $PROJECT_URL"
   without_proto="${PROJECT_URL#*:\/\/}"
   without_auth="${without_proto##*@}"
   [[ $without_auth =~ ^([^:\/]+)(:[[:digit:]]+\/|:|\/)?(.*) ]]
@@ -43,10 +44,11 @@ main(){
   PROJECT_PATH="${BASH_REMATCH[3]}"
   PROJECT_NAME="$(basename $PROJECT_PATH .git)"
 
-  dlog "PROJECT_URL: $PROJECT_URL"
-  dlog "PROJECT_HOST: $PROJECT_HOST"
-  dlog "PROJECT_PATH: $PROJECT_PATH"
-  dlog "PROJECT_NAME: $PROJECT_NAME"
+  printf '%s\n' \
+    "export PROJECT_URL=\"$PROJECT_URL\"" \
+    "export PROJECT_HOST=\"$PROJECT_HOST\"" \
+    "export PROJECT_PATH=\"$PROJECT_PATH\"" \
+    "export PROJECT_NAME=\"$PROJECT_NAME\""
 
   log "parsing for matches..."
   log "coming to a theatre near you."

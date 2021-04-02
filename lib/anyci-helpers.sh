@@ -5,6 +5,9 @@ lib/exec(){
     export EXEC_IMAGE="${EXEC_IMAGE:-$ANYCI_IMAGE}"
     export EXEC_DOCKER_FLAGS="-v,$ANYCI_ROOT:$ANYCI_ROOT:ro"
 
+    # source gitenv provided environment
+    . <("$ANYCI_ROOT/bin/gitenv")
+
     [ -n "$EXEC_IMAGE" ] || {
       dlog "ANYCI_IMAGE not provided. Will build from Dockerfile..."
       EXEC_DOCKERFILE="$(lib/lookup docker/Dockerfile)"
