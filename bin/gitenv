@@ -29,9 +29,6 @@ main(){
   GITENV_CONFIG="${GITENV_CONFIG:-gitenv.yml}"
   GITENV_ROOT="${GITENV_ROOT:-$HOME/.gitenv}"
 
-  cd "$GITENV_ROOT" 2>/dev/null || __ll=WARN log "failed to enter GITENV_ROOT"
-  [ -e "$GITENV_CONFIG" ] || die "missing GITENV_CONFIG: $GITENV_CONFIG"
-
   PROJECT_URL="$(git -C "$PROJECT_ROOT" remote get-url "$PROJECT_REMOTE")" || \
     die "failed to determine '$PROJECT_REMOTE' url of project: $PROJECT_ROOT"
 
@@ -51,7 +48,9 @@ main(){
     "export PROJECT_NAME=\"$PROJECT_NAME\""
 
   log "parsing for matches..."
-  log "coming to a theatre near you."
+  log "coming to a theatre near you."\
+  cd "$GITENV_ROOT" 2>/dev/null || __ll=WARN log "failed to enter GITENV_ROOT"
+  [ -e "$GITENV_CONFIG" ] || die "missing GITENV_CONFIG: $GITENV_CONFIG"
 }
 
 readonly __ENTRY=$(basename "$0")
