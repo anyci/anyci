@@ -3,6 +3,7 @@
 #
 # the CI platform should provide these variables. these are fallback defaults
 # that are used when building locally or if the CI platform does not provide.
+#
 
 # the pipeline ID is used version tagging images &c. typically <branch>-<rev>
 export PIPELINE_ID="${PIPELINE_ID:-local-0}"
@@ -15,3 +16,10 @@ export __REVISION="${__REVISION:-$(git rev-parse HEAD)}"
 export __SOURCE="${__SOURCE:-$(git remote get-url origin)}"
 export __URL="${__URL:-unknown}"
 export __VERSION="${__VERSION:-0.0.0}"
+
+
+export PIPELINE_ROOT="$PROJECT_ROOT/ci"
+[ -d "$PIPELINE_ROOT" ] || mkdir -p "$PIPELINE_ROOT"
+
+export PIPELINE_BUILD_MANIFEST="$PIPELINE_ROOT/build-$PIPELINE_ID.manifest"
+export PIPELINE_PUBLISH_MANIFEST="$PIPELINE_ROOT/publish-$PIPELINE_ID.manifest"
