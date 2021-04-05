@@ -17,9 +17,5 @@ export __SOURCE="${__SOURCE:-$(git remote get-url origin)}"
 export __URL="${__URL:-unknown}"
 export __VERSION="${__VERSION:-0.0.0}"
 
-
-export PIPELINE_ROOT="$PROJECT_ROOT/ci"
-[ -d "$PIPELINE_ROOT" ] || mkdir -p "$PIPELINE_ROOT"
-
-export PIPELINE_BUILD_MANIFEST="$PIPELINE_ROOT/build-$PIPELINE_ID.manifest"
-export PIPELINE_PUBLISH_MANIFEST="$PIPELINE_ROOT/publish-$PIPELINE_ID.manifest"
+export PIPELINE_ARTIFACTS="${PIPELINE_ARTIFACTS:-$PROJECT_ROOT/ci/artifacts/$PIPELINE_ID}"
+[ -d "$PIPELINE_ARTIFACTS" ] || mkdir -p "$PIPELINE_ARTIFACTS"
