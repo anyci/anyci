@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+set -eo pipefail
+. "$ANYCI_ROOT/lib/log-helpers.sh"
+. "$ANYCI_ROOT/lib/step-helpers.sh"
+
+# kickoff downstream project linting
+log "kickoff tests/lint.sh"
+"$PROJECT_ROOT/tests/lint.sh"

@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -eo pipefail
+. "$ANYCI_ROOT/lib/log-helpers.sh"
+. "$ANYCI_ROOT/lib/step-helpers.sh"
+. "$ANYCI_ROOT/lib/compose-helpers.sh"
+
+compose_flags=(
+  -f "ci/docker-compose.yml"
+  -f "ci/docker-compose.test.yml"
+)
+
+trap '{
+  RV=$?
+  [ $RV -eq 0 ] || { compose logs; compose ps; }
+  log "cleaning up composition..."
+  compose down -v --remove-orphans
+  [ $RV -eq 0 ] || die "\\e[1mfailed\\e[0m"
+  log "\\e[1mpassed\\e[0m"
+}' EXIT
+
+compose up -d
+compose run --rm deps wait
+compose/export_vars
+
+log "Available Stack Variables:"
+env | grep STACK_ | sort | sed "s/^/#    /g"
+
+# kickoff downstream project tests
+log "kickoff tests/start.sh"
+"$PROJECT_ROOT/tests/start.sh"

@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -eo pipefail
+. "$ANYCI_ROOT/lib/log-helpers.sh"
+. "$ANYCI_ROOT/lib/step-helpers.sh"
+. "$ANYCI_ROOT/lib/compose-helpers.sh"
+
+compose_flags+=(
+  -f "ci/docker-compose.yml"
+)
+
+log "building ci/docker-compose.yml"
+DOCKER_BUILDKIT=1 compose build --pull
+
+log "writing build.manifest"
+compose config | yq -r '.services[] | .image' > "$ANYCI_ROOT/build.manifest"
+
+log "BUILD_MANIFEST:"
+cat "$ANYCI_ROOT/build.manifest" | sort | sed "s/^/#    /g"
