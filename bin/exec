@@ -31,7 +31,7 @@
 # @source-path bin/exec
 # @source-url https://raw.githubusercontent.com/briceburg/tools/main/bin/exec
 # @revision git-ref HEAD
-# @version 0.3.0
+# @version 0.4.0
 
 main(){
   set -eo pipefail
@@ -104,23 +104,24 @@ docker:set_flags(){
   # make sure we can mount AWS_SHARED_CREDENTIALS_FILE if it's specified
   [ -e "$AWS_SHARED_CREDENTIALS_FILE" ] && docker_flags+=("-v" "$AWS_SHARED_CREDENTIALS_FILE:$AWS_SHARED_CREDENTIALS_FILE")
 
-  # docker-4-mac runs as the 'current' user masqued as root in the linuxkit vm.
-  if [[ "$OSTYPE" =~ darwin|macos* ]]; then
-    docker_flags+=("-v" "$HOME:/root")
-  else
-    # run container as current user on *nixs outside of docker-for-mac VM
-    # shellcheck disable=SC2012
+  if docker info --format '{{.OperatingSystem}}' | grep -q -e 'Docker Desktop' -e 'Docker for Mac'; then
     docker_flags+=(
+      -e "__DOCKER_DESKTOP=true"
+      # docker-4-mac runs as the 'current' user masqued as root in the linuxkit vm.
+      "-v" "$HOME:/root"
+    )
+  else
+    docker_flags+=(
+      -e "__DOCKER_DESKTOP=false"
+      # run container as current user on *nixs (outside of docker-for-mac VM/desktop)
       -u "$(id -u):$(id -g)"
       -v "/etc/passwd:/etc/passwd:ro"
       --group-add "$(ls -ln /var/run/docker.sock | awk '{print $4}')"
+      # @TODO look for docker0 interface until docker-engine 20.10 magical 'host-gateway' value is generally available...
+      #--add-host host.docker.internal:host-gateway
+      --add-host host.docker.internal:$(ip route | grep docker0 | awk '{print $9}')
     )
   fi
-
-  # add host.docker.internal on linux machines
-  # @TODO look for docker0 interface until docker-engine 20.04 is released and magical 'host-gateway' value is generally available...
-  #[[ "$OSTYPE" =~ darwin|macos* ]] || docker_flags+=("--add-host" "host.docker.internal:host-gateway")
-  [[ "$OSTYPE" =~ darwin|macos* ]] || docker_flags+=("--add-host" "host.docker.internal:$(ip route | grep docker0 | awk '{print $9}')")
 }
 
 [[ "$OSTYPE" =~ darwin|macos* ]] && md5sum='md5 -r' || md5sum="md5sum"
