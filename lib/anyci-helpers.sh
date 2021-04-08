@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 lib/exec(){
-  $__lib_exec_initialized || {
+  [ "${__lib_exec_initialized:-false}" = true ] || {
     export EXEC_IMAGE="${EXEC_IMAGE:-$ANYCI_IMAGE}"
     export EXEC_DOCKER_FLAGS="-v,$ANYCI_ROOT:$ANYCI_ROOT"
 
@@ -68,4 +68,3 @@ lib/version(){
 }
 
 export ANYCI_ROOT
-__lib_exec_initialized=false

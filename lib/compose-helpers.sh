@@ -34,7 +34,7 @@ compose/export_vars(){
     eval "export STACK_CONTAINER_${id}=$(docker inspect -f '{{ .Name }}' "$container")"
     while read -r container_port host_ip host_port; do
       [ -n "$container_port" ] || continue
-      if $__DOCKER_DESKTOP; then host_ip="host.docker.internal"; fi
+      [ "${__DOCKER_DESKTOP:-false}" = false ] || host_ip="host.docker.internal"
       eval "export STACK_ENDPOINT_${id}_${container_port//[^0-9]/}=$host_ip:$host_port"
     done < <(docker inspect -f '{{range $p, $conf := .NetworkSettings.Ports}}{{println $p (index $conf 0).HostIp (index $conf 0).HostPort }}{{end}}' "$container")
   done

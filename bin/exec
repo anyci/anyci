@@ -31,7 +31,7 @@
 # @source-path bin/exec
 # @source-url https://raw.githubusercontent.com/briceburg/tools/main/bin/exec
 # @revision git-ref HEAD
-# @version 0.4.0
+# @version 0.4.1
 
 main(){
   set -eo pipefail
@@ -56,7 +56,7 @@ main(){
 docker:get_image_build(){
   [ -e "$EXEC_DOCKERFILE" ] || die "missing $EXEC_DOCKERFILE"
   img="${EXEC_IMAGE_NAME:-bin-exec}:$($md5sum "$EXEC_DOCKERFILE" | awk '{print $1}')"
-  if ${EXEC_ENABLE_CACHE:true} && docker image inspect "$img" &>/dev/null; then
+  if [ "${EXEC_ENABLE_CACHE:-true}" = true ] && docker image inspect "$img" &>/dev/null; then
     log "skipping image build. using $img"
   else
     log "building $EXEC_DOCKERFILE ..."
