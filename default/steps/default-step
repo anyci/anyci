@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-set -eo pipefail
+set -e
 
 # shellcheck source=../../lib/log-helpers.sh
 . "$ANYCI_ROOT/lib/log-helpers.sh"

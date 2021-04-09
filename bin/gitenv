@@ -39,7 +39,7 @@ main(){
   [[ $without_auth =~ ^([^:\/]+)(:[[:digit:]]+\/|:|\/)?(.*) ]]
   PROJECT_HOST="${BASH_REMATCH[1]}"
   PROJECT_PATH="${BASH_REMATCH[3]}"
-  PROJECT_NAME="$(basename $PROJECT_PATH .git)"
+  PROJECT_NAME="$(basename "$PROJECT_PATH" .git)"
 
   printf '%s\n' \
     "export PROJECT_URL=\"$PROJECT_URL\"" \

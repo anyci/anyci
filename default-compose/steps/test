@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 set -eo pipefail
+# shellcheck source=../../lib/log-helpers.sh
 . "$ANYCI_ROOT/lib/log-helpers.sh"
+# shellcheck source=../../lib/step-helpers.sh
 . "$ANYCI_ROOT/lib/step-helpers.sh"
+# shellcheck source=../../lib/compose-helpers.sh
 . "$ANYCI_ROOT/lib/compose-helpers.sh"
 
 compose_flags=(

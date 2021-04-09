@@ -31,7 +31,7 @@
 # @source-path bin/exec
 # @source-url https://raw.githubusercontent.com/briceburg/tools/main/bin/exec
 # @revision git-ref HEAD
-# @version 0.4.1
+# @version 0.4.2
 
 main(){
   set -eo pipefail
@@ -116,17 +116,18 @@ docker:set_flags(){
       # run container as current user on *nixs (outside of docker-for-mac VM/desktop)
       -u "$(id -u):$(id -g)"
       -v "/etc/passwd:/etc/passwd:ro"
-      --group-add "$(ls -ln /var/run/docker.sock | awk '{print $4}')"
+      --group-add "$($pstat '%g' /var/run/docker.sock)"
       # @TODO look for docker0 interface until docker-engine 20.10 magical 'host-gateway' value is generally available...
       #--add-host host.docker.internal:host-gateway
-      --add-host host.docker.internal:$(ip route | grep docker0 | awk '{print $9}')
+      --add-host "host.docker.internal:$(ip route | grep docker0 | awk '{print $9}')"
     )
   fi
 }
 
 [[ "$OSTYPE" =~ darwin|macos* ]] && md5sum='md5 -r' || md5sum="md5sum"
+[[ "$OSTYPE" =~ darwin|macos* ]] && pstat='stat -f' || pstat="stat -c"
 readonly __ENTRY=$(basename "$0")
-log(){ printf "# %-${__lpad:-17}s [${__ll:-INFO}] $*\n" "($__ENTRY)" >&2; }
+log(){ printf "# %-${__lpad:-17}s [${__ll:-INFO}] $*\\n" "($__ENTRY)" >&2; }
 dlog(){ __ll=debug log "$*"; }
 die(){ __ll=ERR log "$*"; exit 1; }
 main "$@"

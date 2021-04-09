@@ -6,6 +6,7 @@ lib/exec(){
     export EXEC_DOCKER_FLAGS="-v,$ANYCI_ROOT:$ANYCI_ROOT"
 
     # source gitenv provided environment
+    # shellcheck source=../bin/gitenv
     . <("$ANYCI_ROOT/bin/gitenv")
 
     [ -n "$EXEC_IMAGE" ] || {
