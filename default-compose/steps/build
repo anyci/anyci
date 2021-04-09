@@ -15,7 +15,7 @@ log "building ci/docker-compose.yml"
 DOCKER_BUILDKIT=1 compose build --pull
 
 log "writing build.manifest"
-compose config | yq -r '.services[] | .image' > "$ANYCI_ROOT/build.manifest"
+compose config | yq -r '.services[] | .image' > "$PIPELINE_ARTIFACTS/build.manifest"
 
 log "BUILD_MANIFEST:"
-sort < "$ANYCI_ROOT/build.manifest" | sed "s/^/#    /g"
+sort < "$PIPELINE_ARTIFACTS/build.manifest" | sed "s/^/#    /g"
