@@ -33,7 +33,13 @@ compose/export_vars(){
     id="${id^^}"
     services+=("$id")
 
-    container="$(compose ps -q "$service")"
+    container="$(compose ps -q "$service" 2>/dev/null)"
+    [ -n "$container" ] || {
+      # this is a non running service, e.g. scale: 0.
+      # extract image and continue
+      eval "export STACK_IMAGE_${id}=$(compose config | yq -r ".services[\"$service\"] | .image")"
+      continue
+    }
     eval "export STACK_CONTAINER_${id}=$(docker inspect -f '{{ .Name }}' "$container")"
     eval "export STACK_IMAGE_${id}=$(docker inspect -f '{{ .Image }}' "$container")"
     while read -r container_port host_ip host_port; do
