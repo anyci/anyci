@@ -20,6 +20,9 @@ compose/export_vars(){
   #    STACK_ENDPOINT_PING_PONG_443=host.docker.internal:57037
   #    STACK_ENDPOINT_PING_PONG_80=host.docker.internal:57038
   #    STACK_ENDPOINT_POSTGRESQL_5432=host.docker.internal:57036
+  #    STACK_IMAGE_FOO=sha256:ab12cd34ef
+  #    STACK_IMAGE_PING_PONG=sha256:gh45ik67lm
+  #    STACK_IMAGE_POSTGRESQL=sha256:no89pq01rs
   #    STACK_SERVICES=FOO,PING_PONG,POSTGRESQL
   #
   services=()
@@ -32,6 +35,7 @@ compose/export_vars(){
 
     container="$(compose ps -q "$service")"
     eval "export STACK_CONTAINER_${id}=$(docker inspect -f '{{ .Name }}' "$container")"
+    eval "export STACK_IMAGE_${id}=$(docker inspect -f '{{ .Image }}' "$container")"
     while read -r container_port host_ip host_port; do
       [ -n "$container_port" ] || continue
       [ "${__DOCKER_DESKTOP:-false}" = false ] || host_ip="host.docker.internal"
